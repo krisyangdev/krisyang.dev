@@ -1,0 +1,23 @@
+All clips are CC0 (public domain) previews from freesound.org, cut and normalized for this project.
+
+pop-*      pop
+plink-*    drop
+creak-*    door
+chime-*    chime
+whoosh, elastic, bubble, windchime: one recording each
+
+pop        https://freesound.org/s/721073/  A soft mouth pop
+pop        https://freesound.org/s/721074/  Tongue pop
+pop        https://freesound.org/s/188381/  3 Popping Pops
+drop       https://freesound.org/s/273870/  water drop 1.aif
+drop       https://freesound.org/s/257349/  small water drops
+door       https://freesound.org/s/778462/  Wooden_Door_Squeak_04
+door       https://freesound.org/s/647646/  door creak 1.wav
+door       https://freesound.org/s/830452/  Door creak
+chime      https://freesound.org/s/858637/  Glockenspiel Jingles
+chime      https://freesound.org/s/348924/  Glockenspiel_46_f4_04
+chime      https://freesound.org/s/609536/  Glockenspiel
+whoosh     https://freesound.org/s/495390/  Foley_Whoosh_Clothes.wav
+elastic    https://freesound.org/s/708182/  Elastic band c note
+bubble     https://freesound.org/s/487531/  bubble
+windchime  https://freesound.org/s/398496/  wind chimes - single 04.wav

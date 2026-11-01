@@ -1,0 +1,166 @@
+---
+import { links, works } from "../data/works.js";
+
+const title = "Kris Yang";
+const description = "Kris Yang makes playful 3D scenes, motion, and small apps for the web and Mac.";
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://krisyang.dev/#kris",
+      name: "Kris Yang",
+      url: "https://krisyang.dev",
+      image: "https://krisyang.dev/avatar.webp",
+      jobTitle: "Independent developer",
+      homeLocation: { "@type": "Place", name: "Shanghai, China" },
+      sameAs: ["https://github.com/krisyangdev", "https://x.com/krisyangdev"],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://krisyang.dev/#website",
+      url: "https://krisyang.dev",
+      name: title,
+      description,
+      author: { "@id": "https://krisyang.dev/#kris" },
+    },
+  ],
+};
+
+// The HTML version of the page: visually hidden next to the 3D scene, shown when the scene
+// fails (class scene-failed, set by scene/main.js) or when JS is off. `scope` is the selector prefix.
+const plainShown = (scope: string) => `
+${scope} .plain{position:static;width:auto;height:auto;margin:0 auto;padding:3rem 1.25rem 4rem;max-width:40rem;overflow:visible;clip-path:none;white-space:normal}
+${scope} .plain h1{margin:0 0 1rem;font-size:3.25rem;line-height:1.05}
+${scope} .plain h2{margin:2.5rem 0 1rem;font-size:1.5rem}
+${scope} .plain nav{display:flex;flex-wrap:wrap;gap:.6rem}
+${scope} .plain ul{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
+${scope} .plain a,${scope} .plain li>span{display:block;padding:.8rem 1.1rem;border-radius:1rem;background:#fbf4ea;color:#6b4a3a;text-decoration:none}
+${scope} .plain nav a{display:inline-block;border-radius:999px}
+${scope} .plain a:hover,${scope} .plain a:focus-visible{background:#f6ecdc;outline:2px solid #ef8f86}
+${scope} .plain li>span{opacity:.6}
+`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#eedfcb" />
+    <meta name="color-scheme" content="light" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content="https://krisyang.dev/og.png?v=20261101" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Kris Yang's personal site" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@krisyangdev" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://krisyang.dev/og.png?v=20261101" />
+    <title>{title}</title>
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+    <style is:inline set:html={plainShown(".scene-failed")} />
+    <noscript><style is:inline set:html={plainShown("html")} /></noscript>
+  </head>
+  <body>
+    <canvas id="stage" aria-hidden="true"></canvas>
+
+    <main class="plain">
+      <header>
+        <h1>Kris Yang</h1>
+        <nav aria-label="Links">
+          {links.map((link) => <a href={link.href} rel="me">{link.label}</a>)}
+        </nav>
+      </header>
+      <section>
+        <h2>Works</h2>
+        <ul>
+          {
+            works.map((work) => (
+              <li>{work.href ? <a href={work.href}>{work.title}</a> : <span>{work.title}</span>}</li>
+            ))
+          }
+        </ul>
+      </section>
+    </main>
+
+    <script>
+      import "../scene/main.js";
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @font-face {
+    font-family: "Fredoka";
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+    src: url("/fonts/fredoka-600.woff") format("woff");
+  }
+
+  html {
+    background: #eedfcb;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background: #eedfcb;
+    color: #6b4a3a;
+    font-family: "Fredoka", ui-rounded, system-ui, sans-serif;
+    font-weight: 600;
+  }
+
+  #stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    touch-action: pan-y;
+  }
+
+  .scroll-spacer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .plain {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .scene-failed #stage,
+  .scene-failed .scroll-spacer {
+    display: none;
+  }
+
+  /* clicks and drags on the scene must not select the hidden plain text (it pops the browser's selection toolbar) */
+  .scene-ready body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+</style>

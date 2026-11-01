@@ -1,0 +1,17 @@
+{
+  "name": "Kris Yang — Personal Site",
+  "short_name": "Kris Yang",
+  "description": "Kris Yang makes playful 3D scenes, motion, and small apps for the web and Mac.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eedfcb",
+  "theme_color": "#eedfcb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
