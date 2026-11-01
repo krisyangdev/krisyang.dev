@@ -13,5 +13,5 @@ export const works = [
   { id: "jelly", title: "Jelly Zoo", image: "/works/jelly.webp", href: "https://jelly.krisyang.dev" },
   { id: "motionboard", title: "Motionboard", image: "/works/motionboard.webp", href: "https://motionboard.app" },
   { id: "lerro", title: "Lerro", image: "/works/lerro.webp", href: "https://lerroapp.com/" },
-  { id: "chatllm", title: "ChatLLM", image: "/works/chatllm.webp", href: "https://chatllm-web.pages.dev" },
+  { id: "chatllm", title: "ChatLLM", image: "/works/chatllm.webp", href: "https://chatllm.krisyang.dev" },
 ];
