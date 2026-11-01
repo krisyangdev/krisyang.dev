@@ -1,4 +1,4 @@
-// Felt hang tags with an embroidered link icon (X, GitHub, email) for the hero line.
+// Felt hang tags with an embroidered link icon (X, GitHub, email) for the works wall garland.
 //
 // The tag is a notched-ribbon outline extruded into puffy white felt (local origin = top center, the
 // grip point; it extends down -y). The icon and the dashed running-stitch border are drawn once into a

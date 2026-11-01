@@ -1,4 +1,5 @@
-// The works wall: two knitted clotheslines with three felt polaroid cards each, then a garland of felt charms.
+// The works wall: two knitted clotheslines with three felt polaroid cards each, then a garland with the
+// link tags (X, GitHub, email) in the middle and felt charms on both sides.
 // Units: world units, everything in the z = 0 plane facing +z. Positions come from WALL in layout.js
 // (the anchors sit at WALL.lines[i].y; the middle of each line sags LINE_SAG below that).
 //
@@ -7,13 +8,16 @@
 //
 // Cards: hover lifts and wiggles, click opens the link (or twirls when there is none), drag pulls the
 // line by the nearest peg and flings it on release. Charms: hover spins and plays a note, click spins more.
+// Link tags: hover wiggles, click tugs the garland and opens the link.
 // The whole wall stops simulating (and drawing) while it is scrolled out of view.
 import * as THREE from "three";
 import { WALL } from "./layout.js";
-import { works } from "../data/works.js";
+import { works, links } from "../data/works.js";
 import { WallStrand } from "./wall-strand.js";
 import { Card, createCardAssets, loadLabelFont } from "./wall-card.js";
 import { Charm, CHARM_SPECS } from "./wall-charms.js";
+import { LinkTag } from "./wall-tags.js";
+import { TAG_W } from "./link-tags.js";
 import { unlockAudio, playElastic } from "./yarn/sound.js";
 
 // ---- tunables
@@ -22,9 +26,12 @@ const LINE_SAG = 0.8; // how far the middle of a card line hangs below its ancho
 const LINE_RADIUS = 0.05;
 const GARLAND_SAG = 0.7;
 const GARLAND_RADIUS = 0.04;
-const GARLAND_HALF_WIDTH = 7; // charms are spread evenly over x = -7 .. 7
+const TAG_GAP = 0.3; // between neighbouring link tags
+const CHARM_INNER_X = 2; // charms fill x = -CHARM_OUTER_X .. -CHARM_INNER_X and CHARM_INNER_X .. CHARM_OUTER_X (the tags hang between)
+const CHARM_OUTER_X = 7;
 const CARD_WIND = 6; // card push at wind strength 1 (world units / s^2); the flip leans about atan(this * dir.z / 9.8)
 const CHARM_WIND = 8;
+const TAG_WIND = 8;
 const DRAG_MAX_PULL = 2.4; // farthest a peg follows the pointer
 const FLING_GAIN = 0.5; // pointer velocity -> impulse on the line
 const FLING_MAX = 14; // world units/s
@@ -47,6 +54,7 @@ export async function createWall({ scene, camera, interaction, breeze }) {
   const strands = [];
   const cards = [];
   const charms = [];
+  const tags = [];
 
   // ---- card lines
   WALL.lines.forEach((line, li) => {
@@ -69,7 +77,7 @@ export async function createWall({ scene, camera, interaction, breeze }) {
     });
   });
 
-  // ---- charm garland
+  // ---- garland: link tags in the middle, charms on both sides
   const garland = new WallStrand({
     y: WALL.charms.y,
     color: WALL.charms.color,
@@ -79,8 +87,17 @@ export async function createWall({ scene, camera, interaction, breeze }) {
   });
   strands.push(garland);
   root.add(garland.mesh);
+  const tagStep = TAG_W + TAG_GAP;
+  links.forEach((link, j) => {
+    const tag = new LinkTag({ link, x: (j - (links.length - 1) / 2) * tagStep, strand: garland, motion });
+    tags.push(tag);
+    root.add(tag.root);
+  });
+  const perSide = CHARM_SPECS.length / 2;
+  const sideSpan = CHARM_OUTER_X - CHARM_INNER_X;
   CHARM_SPECS.forEach((spec, i) => {
-    const x = -GARLAND_HALF_WIDTH + (i / (CHARM_SPECS.length - 1)) * GARLAND_HALF_WIDTH * 2;
+    const along = ((i % perSide) / (perSide - 1)) * sideSpan;
+    const x = i < perSide ? -CHARM_OUTER_X + along : CHARM_INNER_X + along;
     const charm = new Charm({ spec, index: i, x, strand: garland, motion });
     charms.push(charm);
     root.add(charm.root);
@@ -90,6 +107,7 @@ export async function createWall({ scene, camera, interaction, breeze }) {
   for (const strand of strands) strand.settle(breeze, windGain);
   for (const card of cards) card.update(1 / 60, 0, 0); // first pose, before the first frame is drawn
   for (const charm of charms) charm.update(1 / 60, 0, 0);
+  for (const tag of tags) tag.update(1 / 60, 0, 0);
 
   // ---- interaction
   let drag = null; // { card, strand, index, grab, down, start, target, maxPull }
@@ -166,6 +184,15 @@ export async function createWall({ scene, camera, interaction, breeze }) {
     });
   }
 
+  for (const tag of tags) {
+    interaction.add(tag.interactive, {
+      cursor: "pointer",
+      hover: (on) => tag.setHover(on),
+      down: () => unlockAudio(),
+      click: () => tag.open(),
+    });
+  }
+
   // ---- frame loop
   const top = WALL.lines[0].y + 1.6;
   const bottom = WALL.charms.y - 1.8;
@@ -189,7 +216,11 @@ export async function createWall({ scene, camera, interaction, breeze }) {
       const w = breeze.at(charm.root.position.x) * CHARM_WIND * windGain;
       charm.update(dt, w * breeze.dir.x, w * breeze.dir.z);
     }
+    for (const tag of tags) {
+      const w = breeze.at(tag.root.position.x) * TAG_WIND * windGain;
+      tag.update(dt, w * breeze.dir.x, w * breeze.dir.z);
+    }
   }
 
-  return { update, cards, charms, strands };
+  return { update, cards, charms, tags, strands };
 }

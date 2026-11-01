@@ -11,7 +11,7 @@
 //   hop    short arc to a nearby spot (also the happy hop on hover and the flutter when poked)
 //   fly    bezier flight to a spot or off screen; flaps, banks, flares before landing
 //   circle the startle: bursts up, loops once with a feather falling, then flies on (or leaves)
-// Night: it goes to the spot between the last letter and the first tag and sleeps (eyes shut, puffed up,
+// Night: it goes to the bare stretch of line right of the last letter and sleeps (eyes shut, puffed up,
 // breathing). A poke wakes it, it flutters in place and falls asleep again.
 //
 // Rope coupling: BIRD_WEIGHT is added to rope.accel under its feet. hero.update rewrites accel every frame

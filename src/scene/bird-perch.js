@@ -2,10 +2,11 @@
 //
 //   const perches = createPerches(hero);
 //
-// A perch spot is { gap, f }: gap k lies between the k-th and (k+1)-th peg (letters and tags, left to
-// right) and f in 0..1 is the way along it. Pegs are tied to fixed rope particles, so a spot is a
-// fractional particle index s that follows the line wherever it moves. Pins stick up about 0.5 above the
-// line, so a spot keeps PIN_CLEAR + HALF_WIDTH away from both pegs and narrow gaps are not used at all.
+// A perch spot is { gap, f }: gap k lies between the k-th and (k+1)-th stop (letters and the avatar badge, left to
+// right, plus one virtual stop END_REACH out past each end so the bare stretches of line are gaps too) and
+// f in 0..1 is the way along it. Pegs are tied to fixed rope particles, so a spot is a fractional particle
+// index s that follows the line wherever it moves. Pins stick up about 0.5 above the line, so a spot keeps
+// PIN_CLEAR + HALF_WIDTH away from both pegs and narrow gaps are not used at all.
 //   sOf(spot)                  fractional particle index of the feet
 //   pointAt(s, out)            top surface of the rope at index s (Vector3, z = 0)
 //   angleAt(s)                 line slope there (rad)
@@ -19,19 +20,21 @@ const ROPE_TOP = 0.05; // feet rest this far above the particle line (rope radiu
 const PIN_CLEAR = 0.11; // half a clothespin
 export const HALF_WIDTH = 0.32; // half the bird, wings folded
 const MIN_GAP = 2 * (PIN_CLEAR + HALF_WIDTH);
+const END_REACH = 2.4; // the virtual stops sit this far out past the first and last peg
 const SLOPE_SPAN = 0.7; // particles either side used for the slope
 
 export function createPerches(hero) {
   const rope = hero.rope;
   const items = hero.items.slice().sort((a, b) => a.i + a.t - (b.i + b.t));
-  const stops = items.map((it) => it.i + it.t); // particle index of every peg, fixed once attached
+  const pegs = items.map((it) => it.i + it.t); // particle index of every peg, fixed once attached
+  const reach = END_REACH / rope.segment;
+  const stops = [Math.max(0, pegs[0] - reach), ...pegs, Math.min(rope.count - 2, pegs[pegs.length - 1] + reach)];
   const gapCount = stops.length - 1;
 
   const letterStops = items.filter((it) => it.kind === "letter").map((it) => it.i + it.t);
   const nameMid = (letterStops[0] + letterStops[letterStops.length - 1]) / 2;
-  // sleeping spot: the gap between the last letter and the first tag
-  const firstTag = items.findIndex((it) => it.kind === "tag");
-  const sleepGap = firstTag > 0 ? firstTag - 1 : gapCount - 1;
+  // sleeping spot: the bare stretch of line right of the last letter (the last gap)
+  const sleepGap = gapCount - 1;
 
   const a = new THREE.Vector2();
   const b = new THREE.Vector2();
@@ -79,7 +82,7 @@ export function createPerches(hero) {
     crosses(s0, s1) {
       const lo = Math.min(s0, s1);
       const hi = Math.max(s0, s1);
-      for (const s of stops) if (s > lo && s < hi) return true;
+      for (const s of pegs) if (s > lo && s < hi) return true;
       return false;
     },
     pick(out, { fromX = 0, minDist = 0, maxDist = 99, side = 0 } = {}) {

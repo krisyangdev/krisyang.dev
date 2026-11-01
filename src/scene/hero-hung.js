@@ -1,4 +1,4 @@
-// One thing pegged to the hero clothesline (a letter or a tag).
+// One thing pegged to the hero clothesline (a letter or the avatar badge).
 //
 // Scene graph the owner adds to the scene:  pin (clothespin, rides the line)  and  pivot > body > content.
 // pivot is driven by Hang (two-hinge pendulum) at the grip point just under the pin; body carries the
@@ -24,8 +24,6 @@ const APPEAR_TIME = 0.12; // intro: scale-in while falling
 const LOAD_RAMP = 0.05; // s, the hung weight fades in after landing
 const IMPACT_TIME = 0.07; // s, extra downward pull when it lands
 const IMPACT_ACCEL = 260;
-export const TUG_TIME = 0.14; // s, a tag click pulls the line down for this long
-const TUG_ACCEL = 220;
 
 const sstep = (x) => x * x * (3 - 2 * x);
 
@@ -66,7 +64,6 @@ export class Hung {
 
     // interaction state, owned by hero.js
     this.pulse = 0;
-    this.tug = 0;
     this.cool = 0;
     this.grab = null;
     this.pull = 0;
@@ -107,7 +104,6 @@ export class Hung {
     if (this.phase !== "hung") return 0;
     let f = this.weight * Math.min(1, this.sinceLand / LOAD_RAMP);
     if (this.pulse > 0) f += IMPACT_ACCEL;
-    if (this.tug > 0) f += (TUG_ACCEL * this.tug) / TUG_TIME;
     return f;
   }
 
@@ -115,7 +111,6 @@ export class Hung {
   tick(dt, clock) {
     this.cool = Math.max(0, this.cool - dt);
     if (this.pulse > 0) this.pulse -= dt;
-    if (this.tug > 0) this.tug -= dt;
     if (this.phase === "wait") {
       if (clock < this.delay) return false;
       this.phase = "drop";

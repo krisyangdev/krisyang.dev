@@ -60,4 +60,4 @@ export const WALL = {
 };
 
 // lowest world y that must be reachable by scrolling (bottom edge of the view at max scroll)
-export const CONTENT_BOTTOM = -16.9;
+export const CONTENT_BOTTOM = -17.5;
