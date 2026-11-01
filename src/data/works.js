@@ -9,10 +9,9 @@ export const links = [
 
 // wall order: first three on the first line, the rest on the second
 export const works = [
-  { id: "yarn", title: "Yarn World", image: "/works/yarn.webp", href: null },
-  { id: "jelly", title: "Jelly Zoo", image: "/works/jelly.webp", href: null },
+  { id: "yarn", title: "Yarn World", image: "/works/yarn.webp", href: "https://yarn.krisyang.dev" },
+  { id: "jelly", title: "Jelly Zoo", image: "/works/jelly.webp", href: "https://jelly.krisyang.dev" },
   { id: "motionboard", title: "Motionboard", image: "/works/motionboard.webp", href: "https://motionboard.app" },
   { id: "lerro", title: "Lerro", image: "/works/lerro.webp", href: "https://lerroapp.com/" },
-  { id: "snipsake", title: "Snipsake", image: "/works/snipsake.webp", href: null },
-  { id: "fanpian", title: "Fanpian", image: "/works/fanpian.webp", href: null },
+  { id: "chatllm", title: "ChatLLM", image: "/works/chatllm.webp", href: "https://chatllm-web.pages.dev" },
 ];
