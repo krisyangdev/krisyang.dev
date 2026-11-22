@@ -7,11 +7,13 @@ export const links = [
   { id: "email", label: "Email", href: "mailto:ruiyang0012@gmail.com" },
 ];
 
-// wall order: first three on the first line, the rest on the second
+// wall order: first four on the first line, the rest on the second
 export const works = [
   { id: "yarn", title: "Yarn World", image: "/works/yarn.webp", href: "https://yarn.krisyang.dev" },
   { id: "jelly", title: "Jelly Zoo", image: "/works/jelly.webp", href: "https://jelly.krisyang.dev" },
   { id: "motionboard", title: "Motionboard", image: "/works/motionboard.webp", href: "https://motionboard.app" },
   { id: "lerro", title: "Lerro", image: "/works/lerro.webp", href: "https://lerroapp.com/" },
   { id: "chatllm", title: "ChatLLM", image: "/works/chatllm.webp", href: "https://chatllm.krisyang.dev" },
+  { id: "shotframes", title: "ShotFrames", image: "/works/shotframes.webp", href: "https://shotframes.com" },
+  { id: "fancyfont", title: "Fancy Fonts", image: "/works/fancyfont.webp", href: "https://fancyfont.app" },
 ];

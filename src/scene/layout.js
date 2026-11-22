@@ -45,7 +45,7 @@ export const HERO = {
   tagColor: "white",
 };
 
-// Works wall: two lines of three cards, then a garland of small charms, then the page ends.
+// Works wall: two lines of up to four cards, then a garland of small charms, then the page ends.
 // The first line sits high enough that its cards peek in at the bottom of the first screen, so visitors see there is more below.
 export const WALL = {
   lines: [

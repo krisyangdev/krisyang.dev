@@ -1,4 +1,4 @@
-// The works wall: two knitted clotheslines with three felt polaroid cards each, then a garland with the
+// The works wall: two knitted clotheslines with up to four felt polaroid cards each, then a garland with the
 // link tags (X, GitHub, email) in the middle and felt charms on both sides.
 // Units: world units, everything in the z = 0 plane facing +z. Positions come from WALL in layout.js
 // (the anchors sit at WALL.lines[i].y; the middle of each line sags LINE_SAG below that).
@@ -21,7 +21,7 @@ import { TAG_W } from "./link-tags.js";
 import { unlockAudio, playElastic } from "./yarn/sound.js";
 
 // ---- tunables
-const PER_LINE = 3;
+const PER_LINE = 4;
 const LINE_SAG = 0.8; // how far the middle of a card line hangs below its anchors
 const LINE_RADIUS = 0.05;
 const GARLAND_SAG = 0.7;
